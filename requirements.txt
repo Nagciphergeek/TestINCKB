@@ -1,0 +1,16 @@
+﻿fastapi
+uvicorn[standard]
+sqlalchemy
+openai
+python-dotenv
+requests
+urllib3
+reportlab
+sentence-transformers
+faiss-cpu
+numpy
+pandas
+streamlit
+langdetect
+python-multipart
+huggingface-hub

@@ -1,0 +1,34 @@
+===== SAMPLE 1: Database Connection Pool =====
+Users reported app freezing around 3pm daily. INC-4521 raised.
+Checked srv-db-02 — connection pool exhausted (max 50).
+Identified a long-running analytics report query holding connections for 8+ minutes.
+Killed PID 8821, increased pool to 100, added index on orders.created_at.
+App recovered in 5 minutes. Notified john.doe@acme.com.
+
+===== SAMPLE 2: SAML Certificate Expired =====
+Multiple users from 10.0.5.23 unable to login via SSO.
+SAML signing certificate on auth-prod-01 had expired.
+Renewed certificate via internal CA (2-year validity), restarted Tomcat on auth-prod-01.
+Validated login with test account. Set 30-day expiry reminder in calendar.
+TKT-9871 resolved.
+
+===== SAMPLE 3: Disk Full on App Server =====
+Monitoring alert: /var/log on host-app-07 at 98% capacity.
+Application writes 2GB/day of DEBUG logs with no rotation configured.
+Rotated logs immediately, archived files older than 90 days to S3.
+Changed log level from DEBUG to WARN in /etc/app/config.yml.
+Updated logrotate config: daily rotation, 14-day retention. Alert cleared.
+
+===== SAMPLE 4: API Gateway 502 Errors =====
+INC-7742: Customers receiving 502 Bad Gateway on /api/v2/orders from 14:00 to 14:45.
+Upstream container srv-orders-03 was OOM-killed by the kernel (limit: 512MB).
+Increased container memory limit to 1GB in kubernetes deployment manifest.
+Redeployed pod — errors cleared at 14:52 UTC.
+Added Prometheus alert for memory > 80% threshold.
+
+===== SAMPLE 5: Email Notification Service Failure =====
+REQ-3301: Customer activation emails not being delivered since midnight.
+SMTP relay srv-smtp-01 had a full message queue (100K messages).
+Root cause: bad email list batch causing retry loops.
+Flushed the queue, fixed the retry logic, deployed hotfix v2.1.4.
+Service restored at 06:15. Affected users notified via in-app banner.
